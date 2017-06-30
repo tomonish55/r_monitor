@@ -1,0 +1,7 @@
+TCP_Port:
+      WEB:
+        HTTP: 80
+        HTTPS: 443
+      DB:
+        PostgreSQL: 5432
+

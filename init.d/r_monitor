@@ -1,0 +1,66 @@
+#/bin/bash
+
+RETVAL=0
+pidFile="$HOME/r_monitor.pid" 
+logFile="$HOME/r_monitor.log" 
+log_path="$HOME/r_monitor/monitor/logs"
+
+# log path check
+if  [  ! -e $log_path ]; then
+  echo "Please create log directory !" & exit
+fi
+
+do_start() {
+        if pid=`do_status` >/dev/null ;then
+          echo "r_monitor is already running: $pid" 
+          exit 1
+        fi
+        echo "Starting" 
+        cd $HOME/r_monitor/monitor/ 
+        nohup bundle exec ruby $HOME/r_monitor/monitor/start.rb < /dev/null > $logFile 2>&1 &
+        [ $? -ne 0 ] && echo Stopping || echo OK
+        pid=$!
+        echo $pid | tee $pidFile
+}
+
+do_stop() {
+        echo "Stopping" 
+        pid=`cat $pidFile`
+        kill -9 "$pid"
+        rm -rf $pidFile
+        RETVAL=$?
+        echo
+        return $RETVAL
+}
+
+do_status(){
+  if [ -s $pidFile ];then
+    pid=`cat $pidFile`
+    if [ -d /proc/$pid ];then
+      echo "$pid" 
+      echo "Now running" 
+      return 0
+    fi
+  fi
+  echo "Stopping" 
+  return 1
+}
+
+case $* in
+        start)
+           do_start
+           ;;
+        stop)
+          do_stop
+          ;;
+        status)
+          do_status
+          ;;
+        *)
+        echo "usage: $0 {start|stop|status}" >&2
+         exit 1
+         ;;
+
+    esac
+
+exit $RETVA

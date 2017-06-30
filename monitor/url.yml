@@ -1,0 +1,9 @@
+URL:
+  HTTP:
+     target1: 'http://8.8.8.8/utility/healthcheck.php'
+  HTTPS:
+     target1: 'https://8.8.8.8/utility/healthcheck.php'
+ 
+CERT:
+  HTTPS:
+     target2: 'hogehoge.jp'        

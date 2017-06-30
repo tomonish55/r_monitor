@@ -1,0 +1,11 @@
+# frozen_string_literal: true
+source "https://rubygems.org"
+
+gem 'memcache-client'
+gem 'mail'
+gem 'nokogiri'
+gem 'snmp'
+gem 'net-ping'
+gem 'bunny'
+gem 'net-fping'
+gem 'eventmachine'
